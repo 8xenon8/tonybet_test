@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        <table>
+            <tr>
+                <th>
+                </th>
+                {% for teamDTO in division1Data %}
+                    <th>
+                    {{ teamDTO.getTeam().getName() }}
+                    </th>
+                {% endfor %}
+                <th>Score</th>
+            </tr>
+            {% for teamResultsDTO in division1Data %}
+                <tr>
+                    <th>{{ teamResultsDTO.getTeam().getName() }}</th>
+                    {% for team2 in division1Data %}
+                        <td>
+                            {% set game = teamResultsDTO.getGameWithTeam(team2.getTeam()) %}
+                            {% if game %}
+                                {% if game.getWinner() is same as teamResultsDTO.getTeam() %}
+                                    1 : 0
+                                {% else %}
+                                    0 : 1
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>{{ teamResultsDTO.getTeam().getWonQualificationGamesCount() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <hr />
+
+        <table>
+            <tr>
+                <th>
+                </th>
+                {% for teamDTO in division2Data %}
+                    <th>
+                    {{ teamDTO.getTeam().getName() }}
+                    </th>
+                {% endfor %}
+                <th>Score</th>
+            </tr>
+            {% for teamResultsDTO in division2Data %}
+                <tr>
+                    <th>{{ teamResultsDTO.getTeam().getName() }}</th>
+                    {% for team2 in division2Data %}
+                        <td>
+                            {% set game = teamResultsDTO.getGameWithTeam(team2.getTeam()) %}
+                            {% if game %}
+                                {% if game.getWinner() is same as teamResultsDTO.getTeam() %}
+                                    1 : 0
+                                {% else %}
+                                    0 : 1
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>{{ teamResultsDTO.getTeam().getWonQualificationGamesCount() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <hr />
+
+            {{ playoffData.getFinalGame().getWinner().getName() }}
+        <br>
+            {{ playoffData.getSemifinalGames()[0].getWinner().getName() }} | 
+            {{ playoffData.getSemifinalGames()[1].getWinner().getName() }}
+        <br>
+            {{ playoffData.getQuarterfinalGames()[0].getWinner().getName() }}  
+            {{ playoffData.getQuarterfinalGames()[1].getWinner().getName() }} |
+            {{ playoffData.getQuarterfinalGames()[2].getWinner().getName() }}  
+            {{ playoffData.getQuarterfinalGames()[3].getWinner().getName() }}
+
+        <hr>
+
+        <table>
+            <tr>
+                <th> # </th>
+                <th> Team </th>
+            </tr>
+            {% for i, team in playoffData.getWinners() %}
+                <tr>
+                    <td> {{ i }} </td>
+                    <td> {{ team.getName() }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% endblock %}
+    </body>
+</html>
